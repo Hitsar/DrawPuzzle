@@ -6,10 +6,16 @@ namespace Script
     {
         private FinishChecker _finishChecker;
         private LineRenderer _lineRenderer;
+        private Collector _collector;
+        
         private Camera _cameraMain;
         private float _time;
 
-        private void Start() => _cameraMain = Camera.main;
+        private void Start()
+        {
+            _cameraMain = Camera.main;
+            _collector = FindObjectOfType<Collector>();
+        }
 
         private void Update()
         {
@@ -19,6 +25,9 @@ namespace Script
                 if (hit.collider.gameObject.TryGetComponent(out LineRenderer lineRenderer))
                 {
                     _lineRenderer = lineRenderer;
+                    if (_lineRenderer.positionCount > 0)
+                        _collector.LineOverwritten(); 
+                    Clear();
                     _finishChecker = lineRenderer.gameObject.GetComponentInChildren<FinishChecker>();
                 }
             }
@@ -26,16 +35,22 @@ namespace Script
             if (Input.GetMouseButton(0))
             {
                 Vector2 mousePosition = _cameraMain.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-                Draw(_lineRenderer, mousePosition);
+                DrawRoute(_lineRenderer, mousePosition);
             }
 
-            if (Input.GetMouseButtonUp(0) && _finishChecker.LineComeFinish(this))
+            if (Input.GetMouseButtonUp(0))
             {
-                _lineRenderer = null;
+                if (_finishChecker.LineComeFinish())
+                {
+                    _lineRenderer = null;
+                    _collector.AddRoute();
+                }
+                else
+                    Clear();
             }
         }
 
-        private void Draw(LineRenderer lineRenderer, Vector2 position)
+        private void DrawRoute(LineRenderer lineRenderer, Vector2 position)
         {
             _time -= Time.deltaTime;
             if (_time <= 0)

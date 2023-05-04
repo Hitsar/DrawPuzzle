@@ -8,16 +8,14 @@ namespace Script
 
         private void Start() => _lineRenderer = GetComponentInParent<LineRenderer>();
 
-        public bool LineComeFinish(DrawingLine drawingLine)
+        public bool LineComeFinish()
         {
             Vector3 lastPoint = _lineRenderer.GetPosition(_lineRenderer.positionCount - 1);
-
-            if (Physics2D.OverlapPoint(lastPoint).gameObject.TryGetComponent(out FinishChecker finish))
-            {
-                if (finish == this)
-                    return true;
-            }
-            drawingLine.Clear();
+            if (Physics2D.OverlapPoint(lastPoint) == null)
+                return false;
+            else if (Physics2D.OverlapPoint(lastPoint).TryGetComponent(out FinishChecker finish) && finish == this)
+                return true;
+            
             return false;
         }
     }
