@@ -19,11 +19,8 @@ namespace Script
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.TryGetComponent(out FinishChecker finish))
-            {
-                if (finish == _finish)
-                    _collector.AddFinisher();
-            }
+            if (other.gameObject.TryGetComponent(out FinishChecker finish) && finish == _finish)
+                _collector.AddFinisher();
             else
             {
                 _itemMovement.Stop();
