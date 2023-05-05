@@ -1,26 +1,25 @@
 using System;
-using Script.UI;
 using UnityEngine;
 
 namespace Script
 {
-    public class Collector : MonoBehaviour
+    public class PathCollectorData : MonoBehaviour
     {
-        [SerializeField] private int _countItems;
+        [SerializeField] private int _countItems = 2;
         
-        private FinishMenuAnimator _finishMenuAnimator;
+        private MenuActivator _menuActivator;
         private int _finishedItem;
         private int _route;
 
         public event Action MoveItem;
         
-        private void Start() => _finishMenuAnimator = FindObjectOfType<FinishMenuAnimator>(true);
+        private void Start() => _menuActivator = FindObjectOfType<MenuActivator>();
 
         public void AddFinisher()
         {
             _finishedItem++;
             if (_finishedItem == _countItems)
-                _finishMenuAnimator.gameObject.SetActive(true);
+                _menuActivator.FinishMenu();
         }
 
         public void AddRoute()
@@ -30,6 +29,6 @@ namespace Script
                 MoveItem?.Invoke();
         }
 
-        public void LineOverwritten() => _route--;
+        public void RouteOverwritten() => _route--;
     }
 }

@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace Script
 {
-    public class DrawingLine : MonoBehaviour
+    public class DrawingRoute : MonoBehaviour
     {
-        private FinishChecker _finishChecker;
+        private RouteObserver _routeObserver;
         private LineRenderer _lineRenderer;
-        private Collector _collector;
+        private PathCollectorData _pathCollectorData;
         
         private Camera _cameraMain;
         private float _time;
@@ -14,7 +14,7 @@ namespace Script
         private void Start()
         {
             _cameraMain = Camera.main;
-            _collector = FindObjectOfType<Collector>();
+            _pathCollectorData = FindObjectOfType<PathCollectorData>();
         }
 
         private void Update()
@@ -26,9 +26,9 @@ namespace Script
                 {
                     _lineRenderer = lineRenderer;
                     if (_lineRenderer.positionCount > 0)
-                        _collector.LineOverwritten(); 
+                        _pathCollectorData.RouteOverwritten(); 
                     Clear();
-                    _finishChecker = lineRenderer.gameObject.GetComponentInChildren<FinishChecker>();
+                    _routeObserver = lineRenderer.gameObject.GetComponentInChildren<RouteObserver>();
                 }
             }
 
@@ -40,10 +40,10 @@ namespace Script
 
             if (Input.GetMouseButtonUp(0))
             {
-                if (_finishChecker.LineComeFinish())
+                if (_routeObserver.IsRouteCompleted())
                 {
                     _lineRenderer = null;
-                    _collector.AddRoute();
+                    _pathCollectorData.AddRoute();
                 }
                 else
                     Clear();

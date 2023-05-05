@@ -1,30 +1,29 @@
-using Script.UI;
 using UnityEngine;
 
-namespace Script
+namespace Script.Item
 {
     public class ItemCollision : MonoBehaviour
     {
-        [SerializeField] private FinishChecker _finish;
-        private Collector _collector;
+        [SerializeField] private RouteObserver _finish;
+        private PathCollectorData _pathCollectorData;
         private ItemMovement _itemMovement;
-        private LozeMenuAnimator _lozeMenuAnimator;
+        private MenuActivator _menuActivator;
 
         private void Start()
         {
-            _collector = FindObjectOfType<Collector>();
+            _pathCollectorData = FindObjectOfType<PathCollectorData>();
             _itemMovement = GetComponent<ItemMovement>();
-            _lozeMenuAnimator = FindObjectOfType<LozeMenuAnimator>(true);
+            _menuActivator = FindObjectOfType<MenuActivator>();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.TryGetComponent(out FinishChecker finish) && finish == _finish)
-                _collector.AddFinisher();
+            if (other.gameObject.TryGetComponent(out RouteObserver finish) && finish == _finish)
+                _pathCollectorData.AddFinisher();
             else
             {
                 _itemMovement.Stop();
-                _lozeMenuAnimator.gameObject.SetActive(true);
+                _menuActivator.LozeMenu();
             }
         }
     }

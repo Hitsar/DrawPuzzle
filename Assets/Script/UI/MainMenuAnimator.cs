@@ -12,8 +12,7 @@ namespace Script.UI
         {
             _startButton.transform.DOLocalMoveY(0, 1).SetEase(Ease.OutCubic).OnComplete(() =>
             {
-                _startButton.transform.DOScale(new Vector2(1.04f, 1.04f), 0.6f).SetEase(Ease.InOutCubic)
-                    .SetLoops(-1, LoopType.Yoyo);
+                _startButton.transform.DOScale(new Vector2(1.04f, 1.04f), 0.6f).SetEase(Ease.InOutCubic).SetLoops(-1, LoopType.Yoyo);
             });
         }
     }

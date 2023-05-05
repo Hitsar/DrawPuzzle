@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Script
+namespace Script.Item
 {
     public class ItemMovement : MonoBehaviour
     {
-        [SerializeField] private Collector _collector;
+        [SerializeField] private PathCollectorData _pathCollectorData;
         private LineRenderer _lineRenderer;
         private Vector3[] _points;
         private int _step;
@@ -14,13 +14,12 @@ namespace Script
         private void Start() 
         {
             _lineRenderer = GetComponentInParent<LineRenderer>();
-            _collector = FindObjectOfType<Collector>();
         }
 
-        private void OnEnable() => _collector.MoveItem += GetRoute;
-        private void OnDisable() => _collector.MoveItem -= GetRoute;
+        private void OnEnable() => _pathCollectorData.MoveItem += GetRoute;
+        private void OnDisable() => _pathCollectorData.MoveItem -= GetRoute;
 
-        public void GetRoute() 
+        private void GetRoute() 
         {
             _points = new Vector3[_lineRenderer.positionCount];
             _lineRenderer.GetPositions(_points);
